@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        unique_ptr<Resource> rsc{new Resource()};
+        auto rsc = make_unique<Resource>();
         rsc->use(N);
 
     }
