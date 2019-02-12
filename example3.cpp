@@ -1,7 +1,9 @@
 #include <iostream>
 #include <stdexcept>
+#include <memory>
 
 using namespace std;
+
 
 class ProhibitedParameterError : public logic_error {
 public:
@@ -29,17 +31,17 @@ int main(int argc, char* argv[])
         exit(-1);
     }
     const char* N = argv[1];
-    Resource* rsc = nullptr;
+
     try
     {
-        rsc = new Resource();
+        unique_ptr<Resource> rsc{new Resource()};
         rsc->use(N);
-        delete rsc;
+
     }
     catch (ProhibitedParameterError & e)
     {
         cout << e.what() << endl;
-        delete rsc;
+
     }
 
     return 0;
