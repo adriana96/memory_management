@@ -3,6 +3,11 @@
 
 using namespace std;
 
+class ProhibitedParameterError : public logic_error {
+public:
+    ProhibitedParameterError() : logic_error("Passed d. d is prohibited") {}
+};
+
 class Resource
 { 
 public:
@@ -11,7 +16,7 @@ public:
         cout << "Using resource. Passed " << *N << endl;
         if (*N == 'd')
         {
-            throw logic_error("Passed d. d is prohibited.");
+            throw ProhibitedParameterError();
         }
     };
 };
@@ -31,10 +36,12 @@ int main(int argc, char* argv[])
         rsc->use(N);
         delete rsc;
     }
-    catch (logic_error & e)
+    catch (ProhibitedParameterError & e)
     {
         cout << e.what() << endl;
+        delete rsc;
     }
+
     return 0;
 }
 
