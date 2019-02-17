@@ -1,7 +1,19 @@
 #include <iostream>
 #include <memory>
-
+#include <stdexcept>
 using namespace std;
+
+class EmptyListError : public runtime_error
+{
+public:
+    EmptyListError() : runtime_error("Empty list") {}
+};
+
+class NotFoundError : public runtime_error
+{
+public:
+    NotFoundError() : runtime_error("Not found") {}
+};
 
 class Node
 {
@@ -56,7 +68,7 @@ shared_ptr<Node> List::get(const int value)
 {
     if(!first)
     {
-        cout << "List is empty!" << endl;
+        throw EmptyListError();
         return nullptr;
     }
     else
@@ -75,13 +87,13 @@ shared_ptr<Node> List::get(const int value)
                 current = current->next;
             }
         } while(current);
-        cout << "Not found: value " << value << endl;
+        throw NotFoundError();
         return nullptr;
     }
 }
 
 int main()
-{
+try{
     List lista;
     shared_ptr<Node> node4 = make_shared<Node>(4);
     shared_ptr<Node> node7 = make_shared<Node>(7);
@@ -93,4 +105,7 @@ int main()
     auto node = lista.get(1);
 
     return 0;
+}catch(runtime_error & e)
+{
+    cout << "Error: " << e.what() << endl;
 }
